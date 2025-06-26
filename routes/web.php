@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialAuthController;
-use App\Http\Controllers\TeamController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,14 +18,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/teams', [TeamController::class, 'index'])->name('teams.index');
-    Route::get('/teams/create', [TeamController::class, 'create'])->name('teams.create');
-    Route::post('/teams', [TeamController::class, 'store'])->name('teams.store');
-    
-    Route::get('/teams/join', [TeamController::class, 'joinForm'])->name('teams.join');
-    Route::post('/teams/join', [TeamController::class, 'join'])->name('teams.join.submit');
+    Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/create', [ProjectController::class, 'create'])->name('projects.create');
+    Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
+
+    Route::get('/projects/join', [ProjectController::class, 'joinForm'])->name('projects.join');
+    Route::post('/projects/join', [ProjectController::class, 'join'])->name('projects.join.submit');
 });
 
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
 
 Route::get('/auth/google', [SocialAuthController::class, 'redirectToGoogle']);
 Route::get('/auth/google/callback', [SocialAuthController::class, 'handleGoogleCallback']);
